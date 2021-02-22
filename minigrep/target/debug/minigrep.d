@@ -1,0 +1,1 @@
+D:\Professional_files\Side_projects\Rust\projects\grep\minigrep\target\debug\minigrep.exe: D:\Professional_files\Side_projects\Rust\projects\grep\minigrep\src\lib.rs D:\Professional_files\Side_projects\Rust\projects\grep\minigrep\src\main.rs
