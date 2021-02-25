@@ -14,14 +14,18 @@ pub struct Config {
 }
 
 impl Config {
-    pub fn new(args: &[String]) -> Result<Config, &str> {
-        if args.len() < 3 {
-            return Err("not enough arguments");
-        }        
+    pub fn new(mut args: env::Args) -> Result<Config, &'static str> {
+        // skip the first value which is the name of the program
+        args.next();      
         
-        // clone trades off performance for simplicity. We'll go with simple for now.
-        let query = args[1].clone();
-        let filename = args[2].clone();
+        let query = match args.next() {
+            Some(arg) => arg,
+            None => return Err("Didn't get a query string"),
+        };
+        let filename = match args.next() {
+            Some(arg) => arg,
+            None => return Err("Didn't get a file name"),
+        };
 
         // to set the env variable, run $Env:CASE_INSENSITIVE=1 in powershell
         // run Remove-Item Env:CASE_INSENSITIVE to remove the env variable
@@ -54,15 +58,10 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
 }
 
 pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
-    let mut result = Vec::new();
-
-    for line in contents.lines() {
-        if line.contains(query) {
-            result.push(line);
-        }
-    }
-    
-    result
+    contents
+        .lines()
+        .filter(|line| line.contains(query))
+        .collect()
 }
 
 // case-insensitive search
@@ -71,16 +70,8 @@ pub fn search_case_insensitive<'a>(
     contents: &'a str,
 ) -> Vec<&'a str> {
     let query = query.to_lowercase();
-    let mut result = Vec::new();
-
-    for line in contents.lines() {
-        // to_lowercase() creates new data instead of refering to old
-        // contains expects a string slice, hence the &query
-        if line.to_lowercase().contains(&query) {
-            result.push(line);
-        }
-    }
-    result
+    
+    search(&query, contents) // re-using the search function
 }
 
 

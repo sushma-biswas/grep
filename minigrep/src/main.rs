@@ -12,7 +12,7 @@ fn main() {
     // collect() takes those values and puts them into our vector
     let args: Vec<String> = env::args().collect();
 
-    let config = Config::new(&args).unwrap_or_else(|err| {
+    let config = Config::new(env::args()).unwrap_or_else(|err| {
         // printing error messages to std error instead of std output
         eprintln!("Problem parsing arguments: {}", err);
         
