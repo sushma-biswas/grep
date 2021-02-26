@@ -7,6 +7,13 @@ use std::error::Error;
 // for environment variables
 use std::env;
 
+
+// Documentation comments below
+
+/// A struct containing three public variables
+/// query: String
+/// filename: String
+/// case_sensitive: bool
 pub struct Config {
     pub query: String,
     pub filename: String,
@@ -14,6 +21,7 @@ pub struct Config {
 }
 
 impl Config {
+    /// Creates a new Config instance
     pub fn new(mut args: env::Args) -> Result<Config, &'static str> {
         // skip the first value which is the name of the program
         args.next();      
@@ -69,9 +77,13 @@ pub fn search_case_insensitive<'a>(
     query: &str,
     contents: &'a str,
 ) -> Vec<&'a str> {
+        
     let query = query.to_lowercase();
     
-    search(&query, contents) // re-using the search function
+    contents
+        .lines()
+        .filter(|line| line.to_lowercase().contains(&query))
+        .collect()
 }
 
 

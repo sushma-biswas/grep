@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["run",""],["search",""],["search_case_insensitive",""]],"struct":[["Config","A struct containing three public variables query: String filename: String case_sensitive: bool"]]});
